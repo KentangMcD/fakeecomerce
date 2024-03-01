@@ -51,8 +51,13 @@ export default function SigninUp() {
           }
         })
         .catch((error) => {
-          alert("Wrong username or password");
-          console.error("Error:", error);
+          setTimeout(() => {
+            location.replace("/");
+          }, 500);
+          localStorage.setItem(
+            "toastMessage",
+            "Error during signin: Requset failed with stasus code 401"
+          );
         });
     }
   };
@@ -81,15 +86,27 @@ export default function SigninUp() {
           }
         })
         .catch((error) => {
-          alert("System error");
-          console.error("Error:", error);
+          setTimeout(() => {
+            location.replace("/");
+          }, 500);
+          localStorage.setItem("toastMessage", "Login Failed");
         });
     }
   };
 
   const isButtonDisabled = !username || !password || isSubmitting;
 
-  
+  useEffect(() => {
+    const message = localStorage.getItem("toastMessage");
+    console.log(message);
+    if (message) {
+      toast.error(message, {
+        onClose: () => {
+          localStorage.removeItem("toastMessage");
+        },
+      });
+    }
+  }, []);
 
   return (
     <div>
